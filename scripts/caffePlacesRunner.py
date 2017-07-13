@@ -52,16 +52,17 @@ def predictImages(imgList , classprobs, model_def , model_weights):
     
     for line in imgList:
     
-#         path = line.split(',')[0]
-#         true_label = line.split(',')[1]
-        path = line.strip()
+        path = line.split(',')[0].strip()
+        #true_label = line.split(',')[1]
+        #path = line.strip()
         im = caffe.io.load_image(path)
         net.blobs['data'].data[...] = transformer.preprocess('data', im)
         net.forward()
-        out1 = net.blobs['prob'].data
+        #out1 = net.blobs['prob'].data
         out2 = net.blobs['fc7'].data
-        print(out2.shape)
-        out = np.concatenate((out1,out2.reshape(1,-1)),axis =1)
+        #print(out2.shape)
+        #out = np.concatenate((out1,out2.reshape(1,-1)),axis =1)
+        out = out2
         print(out.shape)
         with open(classprobs,'a') as f_handle:
             np.savetxt(f_handle, out , delimiter=',')
@@ -70,8 +71,6 @@ def predictImages(imgList , classprobs, model_def , model_weights):
 
         with open(logfile, 'a+') as f:
             print(log , file = f)
-    
-    print("Done Extracting Features from %n Files"%len(imgList))
     
 
 

@@ -12,11 +12,10 @@ import cv2
 # If you get "No module named _caffe", either you have not built pycaffe or you have the wrong path.
 
 model_root = "/work/sagarj/Work/work_ipython/BellLabs/caffe_models/pretrained/"
-imageRoot = "/work/sagarj/Work/vineCrawl/Logs/"
 
 # imagenet_mean = model_root + 'imagenet_mean.binaryproto'
 
-logfile = "../Data/GoogLenetSampleDict.csv"
+logfile = "../Data/featExtract.csv"
 
 
 #Size of images
@@ -58,10 +57,11 @@ def predictImages(imgList , classprobs, model_def , model_weights):
         im = caffe.io.load_image(path)
         net.blobs['data'].data[...] = transformer.preprocess('data', im)
         net.forward()
-        out1 = net.blobs['prob'].data
+        #out1 = net.blobs['prob'].data
         out2 = net.blobs['loss3/classifier'].data
         #print(out2.shape)
-        out = np.concatenate((out1,out2.reshape(1,-1)),axis =1)
+        #out = np.concatenate((out1,out2.reshape(1,-1)),axis =1)
+        out = out2
         #print(out.shape)
         with open(classprobs,'a') as f_handle:
             np.savetxt(f_handle, out , delimiter=',')

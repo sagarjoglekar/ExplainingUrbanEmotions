@@ -13,6 +13,16 @@ keyfrag = "&key="
 imgDir = "../streetview/AugImages/"
 logFile = "dlLog.log"
 
+# headingPitchCandidates = ["&fov=90&heading=0&pitch=-20&","&fov=90&heading=0&pitch=20&",
+#                           "&fov=90&heading=-30&pitch=0&","&fov=90&heading=-30&pitch=-20&","&fov=90&heading=-30&pitch=20&",
+#                           "&fov=90&heading=-60&pitch=0&","&fov=90&heading=-60&pitch=-20&","&fov=90&heading=-60&pitch=20&",
+#                           "&fov=90&heading=30&pitch=0&","&fov=90&heading=30&pitch=-20&","&fov=90&heading=30&pitch=20&",
+#                           "&fov=90&heading=60&pitch=0&","&fov=90&heading=60&pitch=-20&","&fov=90&heading=60&pitch=20&",]
+
+
+headingCandidates = ["&fov=90&heading=-30&pitch=0&", "&fov=90&heading=-60&pitch=0&",
+                     "&fov=90&heading=30&pitch=0&",  "&fov=90&heading=60&pitch=0&",
+                     "&fov=90&heading=15&pitch=0&" , "&fov=90&heading=-15&pitch=0&"  ]
 
 def getOffsetLatLong(lat,lon,meters):
     #offsets in meters
@@ -32,6 +42,8 @@ def getOffsetLatLong(lat,lon,meters):
     print str(lat) + str(lon)
     print candidates
     return candidates
+ 
+    
 
 def getDownloadedList():
     idList = [ name for name in os.listdir(imgDir) if os.path.isdir(os.path.join(imgDir, name)) ]
@@ -43,28 +55,32 @@ def getKey(path):
     return key
 
 if __name__ == "__main__":
-    dfO = pd.read_csv("../streetview/votes.csv")
-    df = dfO[10:20]
+    df = pd.read_csv("../streetview/4votes.csv")
+    #df = dfO[10:20]
+    
     history_files = getDownloadedList()
-    key = getKey('api2.key')
+    keys = ['api.key' , 'api2.key']
+    key = getKey(keys[0])
     print "using key " + key
-    i = 0
+    crawled = 0
     sl = 0.5
     for index , row in df.iterrows():
         ID = row['left_id']
+        if crawled > 24500:
+            print "Nearing rate limit, change key"
+            exit(0)
         if ID not in history_files:
             lat = row['left_lat'] 
             lon = row['left_long']
             augmentDir = imgDir + "/" + ID 
             if not os.path.exists(augmentDir):
                 os.makedirs(augmentDir)
-            candidates = getOffsetLatLong(lat,lon,5)
+            #candidates = getOffsetLatLong(lat,lon,5)
+            candidates = headingCandidates
             for i in range(len(candidates)):
                 imgName = augmentDir + "/" + ID + str(i) + ".jpg"
-                truncLat = "%.5f" % candidates[i][0]
-                truncLong = "%.5f" % candidates[i][1]
-                imgLoc = truncLat + ',' + truncLong
-                url = baseURL + size + location + imgLoc + keyfrag + key
+                imgLoc = str(lat) + ',' + str(lon)
+                url = baseURL + size + location + imgLoc + candidates[i] + keyfrag + key
 
                 r = rq.get(url)
                 if r.status_code == 200:
@@ -73,7 +89,7 @@ if __name__ == "__main__":
                     print " Downloaded," + ID
                     history_files.append(ID)
                     sleep(sl)
-                    i+=1
+                    crawled+=1
                 else:
                     with open(logFile, 'a') as f:
                         line = "failed," + ID + ',' + str(r.status_code) + "\n"
