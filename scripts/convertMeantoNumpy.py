@@ -14,6 +14,7 @@ data = open( sys.argv[1] , 'rb' ).read()
 blob.ParseFromString(data)
 arr = np.array( caffe.io.blobproto_to_array(blob) )
 print arr.shape
-interpol = scipy.misc.imresize(arr[0,:,:,:],size)
+interpol = np.squeeze(arr)
+#interpol = scipy.misc.imresize(arr[0,:,:,:],size)
 print interpol.shape
 np.save( sys.argv[2] , interpol )
