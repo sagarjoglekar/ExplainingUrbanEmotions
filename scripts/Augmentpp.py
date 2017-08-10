@@ -10,9 +10,9 @@ baseURL = "https://maps.googleapis.com/maps/api/streetview?"
 size = "size=640x480&"
 location = "location="
 keyfrag = "&key="
-imgDir = "../streetview/USAEasternAugImages_Rotational/"
+imgDir = "/datasets/sagarj/streetView/Translational_city_test/"
 logFile = "dlLog.log"
-saveFile = "../streetview/AugmentCitiesRot.csv"
+saveFile = "../streetview/TranslateTest.csv"
 
 # headingPitchCandidates = ["&fov=90&heading=0&pitch=-20&","&fov=90&heading=0&pitch=20&",
 #                           "&fov=90&heading=-30&pitch=0&","&fov=90&heading=-30&pitch=-20&","&fov=90&heading=-30&pitch=20&",
@@ -21,16 +21,17 @@ saveFile = "../streetview/AugmentCitiesRot.csv"
 #                           "&fov=90&heading=60&pitch=0&","&fov=90&heading=60&pitch=-20&","&fov=90&heading=60&pitch=20&",]
 
 
-headingCandidates = ["&fov=90&heading=15&pitch=0&" , "&fov=90&heading=-15&pitch=0&"
-                     "&fov=90&heading=-30&pitch=0&", "&fov=90&heading=30&pitch=0&",  
-                     "&fov=90&heading=-60&pitch=0&", "&fov=90&heading=60&pitch=0&",
-                     "&fov=90&heading=90&pitch=0&", "&fov=90&heading=-90&pitch=0&",
-                     "&fov=90&heading=120&pitch=0&", "&fov=90&heading=-120&pitch=0&",]
+# headingCandidates = ["&fov=90&heading=15&pitch=0&" , "&fov=90&heading=-15&pitch=0&"
+#                      "&fov=90&heading=-30&pitch=0&", "&fov=90&heading=30&pitch=0&",  
+#                      "&fov=90&heading=-60&pitch=0&", "&fov=90&heading=60&pitch=0&",
+#                      "&fov=90&heading=90&pitch=0&", "&fov=90&heading=-90&pitch=0&",
+#                      "&fov=90&heading=120&pitch=0&", "&fov=90&heading=-120&pitch=0&",]
 
 #headingCandidates = ["&fov=90&heading=0&pitch=0&" , "&fov=90&heading=-15&pitch=0&", "&fov=90&heading=15&pitch=0&" ]
 
-#offsetMeters = [0 , 20 , 40 , 60 ]
-offsetMeters = [0]
+headingCandidates = ["&fov=90&heading=0&pitch=0&"]
+offsetMeters = [0 , 20 , 40 , 60 ]
+#offsetMeters = [0]
 
 def getOffsetLatLong(lat,lon,meters):
     #offsets in meters
@@ -46,8 +47,7 @@ def getOffsetLatLong(lat,lon,meters):
     latO2 = lat - dLat * (180.0/math.pi)
     lonO1 = lon + dLon * (180.0/math.pi) 
     lonO2 = lon - dLon * (180.0/math.pi) 
-    #candidates = [(latO1 , lonO1), (latO2 , lonO2) ]
-    candidates = [(lat , lon)]
+    candidates = [ (latO1 , lonO1), (latO2 , lonO2) ]
     print str(lat) + str(lon)
     print candidates
     return candidates
@@ -97,11 +97,11 @@ if __name__ == "__main__":
             candidates = headingCandidates
             
             for j in range(len(offsetCandidates)):
-                #displacement = j/2
+                displacement = j/2
                 imagePaths = []
                 for i in range(len(candidates)): 
-                    displacement = i/2
-                    imgName = augmentDir + "/" + ID + str(j) + str(i) + '_' + str(displacement) + ".jpg"
+                    #displacement = i/2
+                    imgName = augmentDir + "/" + ID + "_" + str(j) + "_"  + str(i) + '_' + str(displacement) + ".jpg"
                     imagePaths.append(imgName)
                     #imgLoc = str(lat) + ',' + str(lon)
                     imgLoc = str(offsetCandidates[j][0]) + ',' + str(offsetCandidates[j][1])
@@ -125,10 +125,10 @@ if __name__ == "__main__":
                 df = pd.DataFrame(data=d)
                 saveDf = saveDf.append(df)
             idCrawled+=1
-            # if idCrawled >= 500:
-            #     print "Done crawling test set"
-            #     saveDf.to_csv(saveFile)
-            #     exit(0)
+            if idCrawled >= 2000:
+                print "Done crawling test set"
+                saveDf.to_csv(saveFile)
+                exit(0)
 
         else:
             print "ID already cralwed!! " 
