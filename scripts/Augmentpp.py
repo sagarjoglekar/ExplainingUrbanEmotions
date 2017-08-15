@@ -73,7 +73,7 @@ if __name__ == "__main__":
     
     history_files = getDownloadedList()
     keys = ['api.key' , 'api2.key', 'api3.key']
-    key = getKey(keys[0])
+    key = getKey(keys[1])
     print "using key " + key
     crawled = 0
     sl = 1
@@ -125,7 +125,7 @@ if __name__ == "__main__":
                 df = pd.DataFrame(data=d)
                 saveDf = saveDf.append(df)
             idCrawled+=1
-            if idCrawled >= 2000:
+            if idCrawled >= 3000:
                 print "Done crawling test set"
                 saveDf.to_csv(saveFile)
                 exit(0)
