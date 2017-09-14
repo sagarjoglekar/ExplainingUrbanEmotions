@@ -1,5 +1,4 @@
 Data
-caffe_models
 notebooks/.ipynb_checkpoints/LearningVisualization-checkpoint.ipynb
 notebooks/.ipynb_checkpoints/PPRanking-checkpoint.ipynb
 notebooks/.ipynb_checkpoints/transferLearn-checkpoint.ipynb
@@ -10,3 +9,4 @@ Segnet-Tutorial
 scripts/api3.key
 scripts/nohup.out
 notebooks/augValide.log
+caffe_models

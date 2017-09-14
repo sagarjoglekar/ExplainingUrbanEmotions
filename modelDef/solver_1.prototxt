@@ -1,0 +1,15 @@
+net: "/work/sagarj/Work/BellLabs/caffe_models/caffe_model_1/caffenet_train_val_1.prototxt"
+test_iter: 200
+test_interval: 200
+base_lr: 0.001
+lr_policy: "step"
+gamma: 0.1
+stepsize: 1000
+display: 200
+max_iter: 15000
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 2000
+#snapshot_prefix: "/work/sagarj/Work/BellLabs/caffe_models/caffe_model_1/caffe_model_beauty_city_augmented"
+snapshot_prefix: "/work/sagarj/Work/BellLabs/caffe_models/caffe_model_1/caffe_model_beauty_city_smartAugment"
+solver_mode: GPU
