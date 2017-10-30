@@ -10,3 +10,8 @@ scripts/api3.key
 scripts/nohup.out
 notebooks/augValide.log
 caffe_models
+notebooks/allImageLocs.json
+notebooks/bostonImages.json
+notebooks/bostonScores.json
+notebooks/Boston127.tar
+notebooks/BostonMatches.tar
