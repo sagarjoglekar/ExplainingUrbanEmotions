@@ -10,12 +10,14 @@ location = "location="
 keyfrag = "&key="
 
 #Change this to appropriate directories
-imgDir = "/datasets/sagarj/streetView/LondonImages/sampleImages/"
-saveFile = imgDir + "sampleSaved.csv"
+imgDir = "/datasets/sagarj/streetView/LondonImages/GreaterLondon_SideViews/"
+saveFile = imgDir + "sampleSavedGreaterLondon.csv"
 
 logFile = "swLog.log"
 
-headingCandidates = ["&fov=90&heading=0&pitch=0&" , "&fov=90&heading=90&pitch=0&", "&fov=90&heading=180&pitch=0&", "&fov=90&heading=-90&pitch=0&" ]
+# headingCandidates = ["&fov=90&heading=0&pitch=0&" , "&fov=90&heading=90&pitch=0&", "&fov=90&heading=180&pitch=0&", "&fov=90&heading=-90&pitch=0&" ]
+# headingCandidates = ["&fov=90&heading=0&pitch=0&"]
+headingCandidates = ["&fov=90&heading=90&pitch=0&" , "&fov=90&heading=-90&pitch=0&"]
 offsetMeters = [10]
 
 def getDownloadedList():
@@ -48,7 +50,7 @@ def getOffsetLatLong(lat,lon,meters):
     return candidates
 
 if __name__ == "__main__":
-    df = pd.read_csv("/datasets/sagarj/streetView/LondonImages/sample_points.csv",header=None)
+    df = pd.read_csv("/datasets/sagarj/streetView/LondonImages/greater_london_points.csv",header=None)
     
     if os.path.exists(saveFile):
         saveDf = pd.read_csv(saveFile)
@@ -57,8 +59,7 @@ if __name__ == "__main__":
 
     history_files = getDownloadedList()
     keys = ['api1.key' , 'api2.key', 'api3.key']
-    key = getKey(keys[0])
-    key = getKey('api1.key')
+    key = getKey(keys[2])
     print "using key " + key
     crawled = 0
     sl = 0.25
@@ -80,7 +81,7 @@ if __name__ == "__main__":
             candidates = headingCandidates
             imagePaths = []
             for i in range(len(candidates)): 
-                imgName = augmentDir + "/" + ID + "_" + str(i) + ".jpg"
+                imgName = augmentDir + "/" + ID + "_" + str(i+1) + ".jpg"
                 imagePaths.append(imgName)
                 imgLoc = str(lat) + ',' + str(lon)
 
