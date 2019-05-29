@@ -50,7 +50,7 @@ def predictImages(imgList , classprobs, model_def , model_weights):
 
 
     
-    for line in imgList:
+    for line in imgList[:10]:
     
         path = line.split(',')[0].strip()
         #true_label = line.split(',')[1]
